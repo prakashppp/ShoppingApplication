@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+	<title>Add to Cart Billing</title>
+	<script src="Product.js"></script>
+
+</head>
+
+<body>
+	<div style="background-color:cyan; padding:15px 0px 15px 20px; margin-left:40%; margin-top:10%; width:200px;">
+		<label id="pname" name="pname">Product name</label><br>
+		<input id="tb1" name="tb1" autofocus><br>
+		<label id="qty" name="qty">Quantity</label><br>
+		<input id="tb2" name="tb2"><br>
+		<label id="price" name="price">Price</label><br>
+		<input id="tb3" name="tb3"><br><br>
+		<button id="bt1" name="bt1">Add to cart</button>&nbsp;
+		<button id="bt2" name="bt2">Create Bill</button>
+	</div>
+
+	<script>
+		const product = [];
+		document.querySelector("#bt1").onclick = function () {
+			const pn = document.querySelector("#tb1");
+			const qt = document.querySelector("#tb2");
+			const pricee = document.querySelector("#tb3");
+			const ob = new Product(pn.value, qt.value, pricee.value);
+			product.push(ob);
+			pn.value = "";
+			qt.value = "";
+			pricee.value = "";
+			pn.focus();
+		};
+
+		document.querySelector("#bt2").onclick = function () {
+			var slno = 1, billamt = 0, totalamt = 0, gst = 0;
+			document.write(`<h1 style="margin-left:170px">PS Kirana Store</h1><br>
+		    <table id="table1" border=1; style="text-align:center">
+		<thead>
+			<tr>
+			<th style="width:100px;">serial</th>
+			<th style="width:100px;">Name</th>
+			<th style="width:100px;">qty</th>
+			<th style="width:100px;">Price</th>
+			<th style="width:100px;">Total</th>
+			</tr>
+		</thead>
+	        `)
+			for (let p of product) {
+
+				document.write(`
+			
+		<tbody>
+			<tr>
+			<td style="text-align:center">${slno}</td>
+			<td style="text-align:center">${p.name}</td>
+			<td style="text-align:center">${p.qty}</td>
+			<td style="text-align:center">${p.price}</td>
+			<td style="text-align:center">${p.qty * p.price}</td>
+			</tr>
+		</tbody>
+			`);
+				slno++;
+				billamt += p.qty * p.price;
+			}
+			document.write(`</table><br>`)
+			if (billamt > 500)
+				gst += Math.floor(billamt * 0.12);
+			totalamt = billamt + gst;
+			document.write(`BillAmt = ${billamt}<br>`);
+			document.write(`GST = ${gst}<br>`);
+			document.write(`TotalAmt = ${totalamt}<br>`);
+
+			document.write(`<button onclick="window.print()">Print Bill</button>`);
+
+
+		};
+	</script>
+</body>
+
+</html>
